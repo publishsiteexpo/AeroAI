@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Simulation Lab | AeroAI</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+
+background:url("bullet train img.png") center center/cover no-repeat fixed;
+
+min-height:100vh;
+
+overflow-x:hidden;
+
+}
+
+/* Dark Overlay */
+
+body::before{
+
+content:"";
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+background:rgba(255,255,255,.70);
+
+backdrop-filter:blur(2px);
+
+z-index:-1;
+
+}
+
+/* ---------------- Sidebar ---------------- */
+
+.sidebar{
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:70px;
+
+height:100vh;
+
+background:white;
+
+overflow:hidden;
+
+transition:.4s;
+
+box-shadow:2px 0 15px rgba(0,0,0,.18);
+
+z-index:1000;
+
+}
+
+.sidebar.active{
+
+width:250px;
+
+}
+
+.menu{
+
+width:70px;
+
+height:70px;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+font-size:34px;
+
+cursor:pointer;
+
+color:#0B5D5D;
+
+font-weight:bold;
+
+}
+
+.menu:hover{
+
+background:#f2f8f8;
+
+}
+
+.nav{
+
+opacity:0;
+
+pointer-events:none;
+
+padding-top:20px;
+
+transition:.3s;
+
+}
+
+.sidebar.active .nav{
+
+opacity:1;
+
+pointer-events:auto;
+
+}
+
+.nav button{
+
+display:block;
+
+width:200px;
+
+margin:18px auto;
+
+padding:16px;
+
+background:#0B5D5D;
+
+color:white;
+
+border:none;
+
+border-radius:12px;
+
+font-size:19px;
+
+cursor:pointer;
+
+transition:.3s;
+
+text-align:left;
+
+}
+
+.nav button:hover{
+
+background:#148484;
+
+transform:translateX(6px);
+
+}
+
+/* ---------------- Main ---------------- */
+
+.main{
+
+margin-left:90px;
+
+padding:50px;
+
+transition:.4s;
+
+}
+
+.sidebar.active ~ .main{
+
+margin-left:270px;
+
+}
+
+/* ---------------- Heading ---------------- */
+
+h1{
+
+text-align:center;
+
+font-size:62px;
+
+color:#0B5D5D;
+
+margin-top:10px;
+
+margin-bottom:15px;
+
+}
+
+.subtitle{
+
+text-align:center;
+
+font-size:25px;
+
+color:#333;
+
+margin-bottom:45px;
+
+font-weight:500;
+
+}
+
+/* ---------------- Glass Card ---------------- */
+
+.card{
+
+max-width:950px;
+
+margin:auto;
+
+background:rgba(255,255,255,.45);
+
+backdrop-filter:blur(14px);
+
+border-radius:25px;
+
+padding:45px;
+
+box-shadow:0 12px 35px rgba(0,0,0,.18);
+
+}
+
+/* Input */
+
+label{
+
+display:block;
+
+font-size:30px;
+
+font-weight:bold;
+
+color:#0B5D5D;
+
+margin-bottom:20px;
+
+}
+
+input{
+
+width:100%;
+
+padding:22px;
+
+font-size:30px;
+
+border-radius:15px;
+
+border:2px solid #0B5D5D;
+
+outline:none;
+
+margin-bottom:30px;
+
+}
+
+/* Button */
+
+button.predict{
+
+display:block;
+
+margin:auto;
+
+padding:18px 55px;
+
+font-size:28px;
+
+border:none;
+
+border-radius:14px;
+
+background:#0B5D5D;
+
+color:white;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+button.predict:hover{
+
+background:#148484;
+
+transform:scale(1.05);
+
+}
+
+/* Loading */
+
+#loading{
+
+display:none;
+
+margin-top:35px;
+
+font-size:30px;
+
+text-align:center;
+
+color:#0B5D5D;
+
+font-weight:bold;
+
+}
+
+/* Results */
+
+.results{
+
+display:none;
+
+margin-top:45px;
+
+}
+
+.grid{
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:25px;
+
+}
+
+.box{
+
+background:white;
+
+border-radius:18px;
+
+padding:25px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.12);
+
+}
+
+.box h2{
+
+font-size:30px;
+
+color:#0B5D5D;
+
+margin-bottom:12px;
+
+}
+
+.box p{
+
+font-size:27px;
+
+font-weight:bold;
+
+color:#333;
+
+line-height:1.6;
+
+}
+
+.train{
+
+margin-top:45px;
+
+text-align:center;
+
+}
+
+.train img{
+
+width:90%;
+
+max-width:850px;
+
+border-radius:20px;
+
+box-shadow:0 10px 30px rgba(0,0,0,.18);
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar" id="sidebar">
+
+<div class="menu" onclick="toggleSidebar()">
+
+☰
+
+</div>
+
+<div class="nav">
+
+<button> HOME <a href="MAIN PAGE.html"> HOME</a> </button>
+
+<button> AI CYCLE <a href="AI PROJECT.html"> AI CYCLE</a> </button>
+
+<button> SIMULATION LAB <a href="SIMULATION LAB.html"> SIMULATION LAB</a> </button>
+
+<button> PHYSICS BEHIND AeroAI </button>
+
+<button> RESULT AND ANALYSIS <a href="RESULT.html"> RESULT </a> </button>
+
+<button> CONCLUSION </button>
+</button>
+
+</div>
+
+</div>
+
+<!-- Main -->
+
+<div class="main">
+
+<h1>SIMULATION LAB</h1>
+
+<div class="subtitle">
+
+Enter the operating speed of a bullet train and let <b>AeroAI</b> predict the theoretical aerodynamic design.
+
+</div>
+
+<div class="card">
+
+<label>
+
+Bullet Train Speed (km/h)
+
+</label>
+
+<input
+type="number"
+id="speed"
+placeholder="Example : 420">
+
+<button class="predict" onclick="predictAI()">
+
+Predict with AeroAI
+
+</button>
+
+<div id="loading">
+
+ AeroAI is analysing aerodynamic conditions...
+
+</div>
+
+<div class="results" id="results">
+
+<div class="grid">
+
+<div class="box">
+
+<h2> Predicted Nose Shape</h2>
+
+<p id="shape"></p>
+
+</div>
+
+<div class="box">
+
+<h2>🌬 Drag Coefficient</h2>
+
+<p id="drag"></p>
+
+</div>
+
+<div class="box">
+
+<h2> Energy Efficiency</h2>
+
+<p id="eff"></p>
+
+</div>
+
+<div class="box">
+
+<h2> Estimated Energy Saving</h2>
+
+<p id="save"></p>
+
+</div>
+
+</div>
+
+<div class="train">
+
+<img src="images/bullet-train.png">
+
+</div>
+
+</div>
+
+</div>
+<script>
+
+function toggleSidebar(){
+
+document.getElementById("sidebar").classList.toggle("active");
+
+}
+
+function predictAI(){
+
+let speed=parseInt(document.getElementById("speed").value);
+
+if(isNaN(speed) || speed<100){
+
+alert("Please enter a valid bullet train speed.");
+
+return;
+
+}
+
+document.getElementById("results").style.display="none";
+
+document.getElementById("loading").style.display="block";
+
+setTimeout(function(){
+
+document.getElementById("loading").style.display="none";
+
+document.getElementById("results").style.display="block";
+
+let shape="";
+let drag="";
+let eff="";
+let save="";
+let image="";
+
+if(speed<250){
+
+shape="Short Streamlined Nose";
+
+drag="0.32";
+
+eff="82%";
+
+save="4%";
+
+image="images/train1.png";
+
+}
+
+else if(speed<350){
+
+shape="Medium Streamlined Nose";
+
+drag="0.28";
+
+eff="88%";
+
+save="8%";
+
+image="images/train2.png";
+
+}
+
+else if(speed<450){
+
+shape="Long Aerodynamic Nose";
+
+drag="0.23";
+
+eff="92%";
+
+save="11%";
+
+image="images/train3.png";
+
+}
+
+else if(speed<550){
+
+shape="Extended Bullet Nose";
+
+drag="0.20";
+
+eff="95%";
+
+save="14%";
+
+image="images/train4.png";
+
+}
+
+else{
+
+shape="Ultra Streamlined High-Speed Nose";
+
+drag="0.18";
+
+eff="97%";
+
+save="18%";
+
+image="images/train5.png";
+
+}
+
+document.getElementById("shape").innerHTML=shape;
+
+document.getElementById("drag").innerHTML=drag;
+
+document.getElementById("eff").innerHTML=eff;
+
+document.getElementById("save").innerHTML=save;
+
+document.querySelector(".train img").src=image;
+
+},2000);
+
+}
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AeroAI</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,Arial,sans-serif;
+}
+
+body{
+
+    margin:0;
+    padding:0;
+
+    background:
+        linear-gradient(
+            rgba(255,255,255,0.72),
+            rgba(255,255,255,0.72)
+        ),
+        url("FUTURE AERO PIC.png");
+
+    background-size:cover;
+
+    background-position:center;
+
+    background-repeat:no-repeat;
+
+    background-attachment:fixed;
+
+    min-height:100vh;
+
+    font-family:Segoe UI, sans-serif;
+
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+
+position:fixed;
+left:0;
+top:0;
+
+width:70px;
+height:100vh;
+
+background:#ffffff;
+
+box-shadow:2px 0 10px rgba(0,0,0,.12);
+
+transition:.4s;
+
+overflow:hidden;
+
+z-index:1000;
+
+}
+
+.sidebar.active{
+
+width:250px;
+
+}
+
+.menu-btn{
+
+width:70px;
+height:70px;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:35px;
+
+cursor:pointer;
+
+color:#0B5D5D;
+
+font-weight:bold;
+
+}
+
+.nav{
+
+display:none;
+
+padding-top:25px;
+
+}
+
+.sidebar.active .nav{
+
+display:block;
+
+}
+
+.nav button{
+
+display:block;
+
+width:200px;
+
+margin:15px auto;
+
+padding:15px;
+
+border:none;
+
+border-radius:10px;
+
+background:#0B5D5D;
+
+color:white;
+
+font-size:18px;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.nav button:hover{
+
+background:#128080;
+
+}
+
+/* ================= MAIN ================= */
+
+.main{
+
+margin-left:70px;
+
+height:100vh;
+
+transition:.4s;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+}
+
+.sidebar.active ~ .main{
+
+margin-left:250px;
+
+}
+
+/* ================= TITLE STRIP ================= */
+
+.strip{
+
+position:relative;
+
+width:100%;
+
+height:160px;
+
+background:#0B5D5D;
+
+overflow:hidden;
+
+display:flex;
+
+align-items:center;
+
+}
+
+/* ================= MOVING TEXT ================= */
+
+.text{
+
+position:absolute;
+
+white-space:nowrap;
+
+font-size:60px;
+
+font-weight:bold;
+
+color:white;
+
+left:0;
+
+animation:moveText 12s linear infinite alternate;
+
+}
+
+/* Animation only inside strip */
+
+@keyframes moveText{
+
+0%{
+
+transform:translateX(0);
+
+}
+
+100%{
+
+transform:translateX(calc(100vw - 250px - 100%));
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar">
+
+<div class="menu-btn" onclick="toggleMenu()">
+
+☰
+
+</div>
+
+<div class="nav">
+
+<button> HOME <a href="MAIN PAGE.html"> HOME</a> </button>
+
+<button> AI CYCLE <a href="AI PROJECT.html"> AI CYCLE</a> </button>
+
+<button> SIMULATION LAB <a href="SIMULATION LAB.html"> SIMULATION LAB</a> </button>
+
+<button> PHYSICS BEHIND AeroAI </button>
+
+<button> RESULT AND ANALYSIS <a href="RESULT.html"> RESULT </a> </button>
+
+<button> CONCLUSION </button>
+
+</div>
+
+</div>
+
+<div class="main">
+
+<div class="strip">
+
+<div class="text">
+
+AeroAI: The Theoretical Kinetic Drag Minimizer
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function toggleMenu(){
+
+document.getElementById("sidebar").classList.toggle("active");
+
+}
+
+</script>
+
+</body>
+
+</html>
